@@ -1,16 +1,22 @@
+import java.util.Random;
+import java.util.Scanner;
 public class TEST {
 
-	int arr1[2][4] = {{1,2,3,4},{5,6,7,8}};
-	arr1 = num;
-	
-    
-	public static void main(String[] args) {
-		int arr2[4][2] = {{1,5},{2,6},{3,7},{4,8}};
-			for(int i = 0; i <arr.length; i++) {
-				for(int j = 0; j <arr[i].length; j++) {
-					System.out.print(arr[i][j] + "\t");
-				}
-				System.out.println();
-	}	
-}
+	public static void main(String[] args) 
+	{
+		for(;;) {
+		Random randomV1 = new Random();		
+
+		int Z = randomV1.nextInt(897)+102;
+		int A = (Z/100);
+		int B = (Z -A*100) /10;
+		int C = (Z - (A*100) - (B*10));
+		if((A!=B) && (B!=C) && (A!=C))
+		{
+			System.out.println(Z);
+			break;
+		}
+	}
+		Scanner s = new Scanner(System.in);
+}		
 }

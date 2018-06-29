@@ -8,7 +8,7 @@
 		balance -= amount;
 		return balance;
 	}
-		public int chedcMyBalance() {
+		public int checkMyBalance() {
 			System.out.println("잔액 : " + balance);
 			return balance;
 	}	
@@ -29,8 +29,8 @@
 		park.withdraw(2000);
 		
 		// 각 인스턴스를 대상으로 잔액을 조회
-		//yoon.checkMyBalance();
-		//park.checkMyBalance();
+		yoon.checkMyBalance();
+		park.checkMyBalance();
 
 	}
 }
