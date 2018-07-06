@@ -1,8 +1,8 @@
-class Point implements Cloneable {
+class Point3 implements Cloneable {
 	private int xPos;
 	private int yPos;
 	
-	public Point(int x, int y) {
+	public Point2(int x, int y) {
 		xPos = x;
 		yPos = y;
 	}
@@ -18,11 +18,11 @@ class Point implements Cloneable {
 }
 class InstanceCloning {
 	public static void main(String[] args) {
-		Point org = new Point(3, 5);
-		Point cpy;
+		Point2 org = new Point2(3, 5);
+		Point2 cpy;
 		
 		try {
-			cpy = (Point)org.clone();
+			cpy = (Point2)org.clone();
 			org.showPosition();
 			cpy.showPosition();
 			
