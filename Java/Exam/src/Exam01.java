@@ -18,7 +18,7 @@ class Calc
 	{
 		int nResult = n1 + x2;
 	//	System.out.println(nResult);
-		return nResult;
+	//	return nResult;
 	}
 }
 public class Exam01 {
@@ -28,10 +28,10 @@ public class Exam01 {
 		int num2 = 7;
 		
 		Calc myCal = new Calc(num1, num2);
-		int num3 = myCal.Add(num1, num2);
+//		int num3 = myCal.Add(num1, num2);
 		
-		int num4 = num3 * 10-20;
-		System.out.println(num4);
+	//	int num4 = num3 * 10-20;
+	//	System.out.println(num4);
 		
 		
 //		System.out.println(num1 + num2);
