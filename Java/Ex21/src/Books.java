@@ -30,9 +30,9 @@ class Books
 		MyBook book1 = new MyBook("게임스쿨", 10000);
 		book1.print();
 		
-		MyBook book2 = new Mybook(book1);
-		book2.title = "모바일게임";
-		book2.print();
+	//	MyBook book2 = new Mybook(book1);
+	//	book2.title = "모바일게임";
+//		book2.print();
 	}
 }
 
