@@ -30,8 +30,8 @@ class MultiServer7 {
 				socket = serverSocket.accept();
 				System.out.println(socket.getInetAddress() + ":" + socket.getPort());
 
-				Thread msr = new MultiServerT(socket);// 쓰레드 생성
-				msr.start();// 쓰레드 시동
+				Thread mst = new MultiServerT(socket);// 쓰레드 생성
+				mst.start();// 쓰레드 시동
 			}
 			
 		} catch (Exception e) {
