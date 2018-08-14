@@ -1,0 +1,22 @@
+<!DOCTYPE html>
+<html>
+<head><title>script태그에 자바스크립트 작성</title>
+<script>
+			<!--obj는 전달받은 img태그를 가리킴-->
+function over(obj) {
+	obj.src="media/banana.png";
+}
+function out(obj) {
+	obj.src="media/apple.png";
+}
+</script>
+</head>
+<body>
+<h3>마우스 올려 보세요</h3>
+<hr>
+<img src="media/apple.png" alt="이미지"
+		onmouseover="over(this)"
+		onmouseout="out(this)">
+<!-- this는 현재 img 태그를 가리키는 자바스크립트키워드 -->
+</body>
+</html>

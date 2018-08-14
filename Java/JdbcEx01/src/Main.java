@@ -27,7 +27,7 @@ public class Main {
 			
 			ResultSet rs = stmt.executeQuery(sb.toString());
 			while(rs.next()) {
-				System.out.println("eno : " + rs.getInt(1) + ",");
+				System.out.print("eno : " + rs.getInt(1) + ",");
 				System.out.println("ename : " + rs.getString("ename"));
 			}
 			rs.close();

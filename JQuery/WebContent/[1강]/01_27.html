@@ -1,0 +1,22 @@
+<!DOCTYPE html>
+<html>
+<head>
+<script src="http://code.jquery.com/jquery.js"></script>
+	<script>
+	$.each(array, function (index, item){
+	// 변수를 선언합니다.
+	var output = ' ';
+	// 문자열을 만듭니다.
+	output += '<a href="' + item.link +'">';
+	output += '<h1>' + item.name + '<h1>';
+	output += '</a>';
+	// 집어넣습니다.
+	document.body.innerHTML += output;
+	} );
+	</script>
+	
+</head>
+<body>
+
+</body>
+</html>

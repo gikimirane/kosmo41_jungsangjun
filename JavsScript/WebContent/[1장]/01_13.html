@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title>01-13:</title>
+<script>
+function digit8(v) {
+	var str =="";
+	for(i=0; i<8; i++, v<<=1) {
+		if((v& 0x80)) str += "1";
+		else str += "0";
+	}
+	return str;
+}
+</script>
+</head>
+<body>
+<h3></h3>
+<hr>
+<script>
+	var x=10, y=3;
+	document.write("<pre>");
+	document.write("x=" + x + ", y=" + y + "<br>");
+	document.write("x:             " + digit9(x) + "<br>");
+	document.write("y:             " + digit9(y) + "<br>");
+	document.write("<hr>");
+	document.write("x&y :          " + digit8(x&y) + "")
+	document.write
+	document.write
+	document.write
+</script>
+
+</body>
+</html>

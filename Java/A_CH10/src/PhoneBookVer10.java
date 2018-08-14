@@ -5,14 +5,10 @@ import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.io.Serializable;
-import java.sql.Connection;
-import java.sql.DriverManager;
-import java.sql.ResultSet;
-import java.sql.SQLException;
-import java.sql.Statement;
 import java.util.HashSet;
 import java.util.Iterator;
 import java.util.Scanner;
+import java.sql.*;
 
 interface INIT_MENU
 {
@@ -29,6 +25,22 @@ class MenuChoiceException extends Exception
 	int wrongChoice;
 	
 	public MenuChoiceException(int choice)
+	{
+		super("잘못된 선택이 이뤄졌습니다.");
+		wrongChoice=choice;		
+	}
+	
+	public void showWrongChoice()
+	{
+		System.out.println(wrongChoice+ " 에 해당하는 선택은 존재하지 않습니다.");
+	}
+}
+
+class ChangeChoiceException extends Exception
+{
+	int wrongChoice;
+	
+	public ChangeChoiceException(int choice)
 	{
 		super("잘못된 선택이 이뤄졌습니다.");
 		wrongChoice=choice;		
@@ -242,7 +254,7 @@ class PhoneBookManager
 		System.out.println("해당하는 데이터가 존재하지 않습니다 . \n");
 	}
 	
-	public void changeData()
+	public void changeData() throws ChangeChoiceException
 	{
 		System.out.println("데이터 수정을 시작합니다...");
 		
@@ -252,22 +264,54 @@ class PhoneBookManager
 		if(info==null)
 		{
 			System.out.println("해당하는 데이터가 존재하지 않습니다. \n");
+			return;
 		}
 		else
 		{
 			info.showPhoneInfo();
 		}
-		System.out.println("수정할 데이터를 선택하세요...");
-		System.out.println("1.소속, 2.전화번호, 3.학과, 4.학년, 5.회사");
+		
+		
+				
+		System.out.println("수정할 데이터를 선택하세요...");		
+		System.out.println("1.전화번호, 2.학과, 3.학년, 4.회사, 5.나가기");
 		System.out.print("선택>> ");
 		int choice=MenuViewer.keyboard.nextInt();
 		MenuViewer.keyboard.nextLine();
 		PhoneInfo info1=null;
 		
-		
-		
+		if(choice< 1|| choice>5)		
+		throw new ChangeChoiceException(choice);
+		switch(choice)
+		{
+		case 1 :
+			String phone=MenuViewer.keyboard.nextLine();
+			break;
+		case 2 :
+			String major=MenuViewer.keyboard.nextLine();
+			break;
+		case 3 :
+			int year=MenuViewer.keyboard.nextInt();
+			break;
+		case 4 :
+			String company=MenuViewer.keyboard.nextLine();
+			break;
+		case 5 :
+			
+			return;
+//			PhoneBookManager manager = null;
+//			manager.storeToFile();
+//			System.out.println("메인 화면으로 돌아갑니다.");
+
+		}
 		System.out.println("데이터 수정이 완료되었습니다. \n");
-	}
+		}
+		
+
+
+			
+	
+	
 	
 	private PhoneInfo search(String name)
 	{
@@ -347,50 +391,24 @@ class MenuViewer
 }
 	
 class PhoneBookVer10
-{
-	static {
-		try {
-			Class.forName("oracle.jdbc.driver.OracleDriver");
-		}catch(ClassNotFoundException cnfe) {
-			cnfe.printStackTrace();
-		}
-	}
-	public static void main(String[] args) 
-	{
-		try {	// 데이터베이스의 연결을 설정
-			Connection con = DriverManager.getConnection(
-					"jdbc:oracle:thin:@localhost:1521:xe",
-					"scott",
-					"tiger");
-			Statement stmt = con.createStatement();	// Statement를 가져옴
-			StringBuffer sb = new StringBuffer();
-			sb.append("select * from department");
-			
-			ResultSet rs = stmt.executeQuery(sb.toString()); // sql문을 실행
-			while(rs.next()) {
-				System.out.println("eno : " + rs.getInt(1) + ",");
-				System.out.println("ename : " + rs.getString("ename"));
-			}
-			rs.close();
-			stmt.close();
-			con.close();
-		}catch(SQLException sqle) {
-			System.out.println("Connection Error");
-			sqle.printStackTrace();
-			
+{		
+	public static void main(String[] args) throws ChangeChoiceException 
+	{	
 		PhoneBookManager manager=PhoneBookManager.createManagerInst();
 		int choice;
 		
 		while(true)
 		{
 			try 
-			{
+			{ 
 				MenuViewer.showMenu();
 				choice=MenuViewer.keyboard.nextInt();
 				MenuViewer.keyboard.nextLine();
 				
 				if(choice<INIT_MENU.INPUT || choice>INIT_MENU.EXIT)
 					throw new MenuChoiceException(choice);
+				if(choice< 1 || choice>5)		
+					throw new ChangeChoiceException(choice);
 	
 				switch(choice)
 				{
@@ -420,4 +438,4 @@ class PhoneBookVer10
 		}
 	}
 }
-}
+

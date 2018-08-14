@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title>01-23</title>
+<script>
+function evalParselntlsNaN(){
+	var res = eval("2*3+4*6");
+	document.write("eval(\"2*3+4*6\")는 32<br>");
+	
+	var m = parselnt("32");
+	document.write("parselnt(\"32\")는 " + m + "<br>");
+	var n = parselnt("0x32");
+	document.write("parselnt(\"0x32\")는 " + n + "<br><br>");
+	
+	n = parselnt("hello");
+	if(isNaN(n))
+		document.write("hello는 숫자가 아닙니다");
+}
+</script>
+</head>
+<body>
+<h3>eval(), parselnt(), isNaN()</h3>
+<hr>
+<script>
+	evalParselntisNaN();
+</script>
+</body>
+</html>
