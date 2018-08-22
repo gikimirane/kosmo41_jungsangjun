@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>Insert title here</title>
+<script src="http://code.jquery.com/jquery.js"></script>
+</head>
+<body>
+	<script>
+		$(document).ready(function (){
+			$.ajax({
+				url: '/jquery/data.xml',
+				success: function (data) {
+					alert(data);
+					$(data).find('product').each(function (){
+						var name = $(this).find('name').text();
+						var price = $(this).find('price').text();
+						
+						$('<h1></h1>').text(name + ':' + price).appendTo('body')
+				});
+			}
+		});
+	});
+	</script>
+</body>
+</html>
