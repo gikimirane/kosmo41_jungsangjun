@@ -7,13 +7,12 @@
 <title>Insert title here</title>
 </head>
 <body>
-<%
-	request.setCharacterEncoding("UTF-8");
 
-	session.invalidate();
+	<form action="LoginProcess" method="post">
+		아이디 : <input type="text" name="id"><br>
+		비밀번호 : <input type="text" name="pw"><br>
+		<input type="submit" value="로그인">
+	</form>
 	
-	response.sendRedirect("login.html");
-	
-%>
 </body>
 </html>
