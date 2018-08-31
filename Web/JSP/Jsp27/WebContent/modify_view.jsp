@@ -35,7 +35,7 @@
 			<tr>
 				<td> 내용 </td>
 				<td> 
-				<textarea rows="10" name="bContent" >${content_view.bContent}</textarea> </td>
+				<textarea rows="10" name="bContent">${content_view.bContent}</textarea> </td>
 			</tr>
 			<tr>
 				<td colspan="2"> 

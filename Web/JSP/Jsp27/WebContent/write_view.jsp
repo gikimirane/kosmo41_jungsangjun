@@ -5,10 +5,11 @@
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
 <title>Insert title here</title>
+<script src="https://cdn.ckeditor.com/4.10.0/standard/ckeditor.js"></script>
 </head>
 <body>
 		
-	<table width="500" cellpadding="0" cellspacing="0" border="1">
+	<table cellpadding="0" cellspacing="0" border="1">
 		<form action="write.do" method="post">
 			<tr>
 				<td> 이름 </td>
@@ -20,7 +21,9 @@
 			</tr>
 			<tr>
 				<td> 내용 </td>
-				<td> <textarea name="bContent" rows="10"></textarea> </td>
+				<td> 
+				<textarea name="bContent" rows="10" cols="80">
+				</td>
 			</tr>
 			<tr>
 				<td colspan="2">

@@ -26,25 +26,25 @@ public class BDao {
 	
 	public void write(String bName, String bTitle, String bContent) {
 		
-		Connection connection = null;
-		PreparedStatement preparedStatement = null;
+		Connection con = null;
+		PreparedStatement pstmt = null;
 		
 		try {
-			connection = dataSource.getConnection();
+			con = dataSource.getConnection();
 			String query = "insert into mvc_board (bId, bName, bTitle, bContent, bHit, "
 					+ "bGroup, bStep, bIndent) values "
 					+ "(mvc_board_seq.nextval, ?, ?, ?, 0, mvc_board_seq.currval, 0, 0 )";
-			preparedStatement = connection.prepareStatement(query);
-			preparedStatement.setString(1, bName);
-			preparedStatement.setString(2, bTitle);
-			preparedStatement.setString(3, bContent);
-			int rn = preparedStatement.executeUpdate();
+			pstmt = con.prepareStatement(query);
+			pstmt.setString(1, bName);
+			pstmt.setString(2, bTitle);
+			pstmt.setString(3, bContent);
+			int rn = pstmt.executeUpdate();
 		} catch (Exception e) {
 			e.printStackTrace();
 		} finally {
 			try {
-				if(preparedStatement != null) preparedStatement.close();
-				if(connection != null) connection.close();
+				if(pstmt != null) pstmt.close();
+				if(con != null) con.close();
 			} catch (Exception e2) {
 				e2.printStackTrace();
 			}
@@ -55,18 +55,18 @@ public class BDao {
 	public ArrayList<BDto> list() {
 		
 		ArrayList<BDto> dtos = new ArrayList<BDto>();
-		Connection connection = null;
-		PreparedStatement preparedStatement = null;
+		Connection con = null;
+		PreparedStatement pstmt = null;
 		ResultSet resultSet = null;
 		
 		try {
-			connection = dataSource.getConnection();
+			con = dataSource.getConnection();
 			
 			String query = "select bId, bName, bTitle, bContent, bDate, "
 					+ "bHit, "+ "bGroup, bStep, bIndent "
 					+ "from mvc_board order by bGroup desc, bStep asc";
-			preparedStatement = connection.prepareStatement(query);
-			resultSet = preparedStatement.executeQuery();
+			pstmt = con.prepareStatement(query);
+			resultSet = pstmt.executeQuery();
 			
 			while (resultSet.next()) {
 				int bId = resultSet.getInt("bId");
@@ -89,8 +89,8 @@ public class BDao {
 		} finally {
 			try {
 				if(resultSet != null) resultSet.close();
-				if(preparedStatement != null) preparedStatement.close();
-				if(connection != null) connection.close();
+				if(pstmt != null) pstmt.close();
+				if(con != null) con.close();
 			} catch (Exception e2) {
 				e2.printStackTrace();
 			}
@@ -103,18 +103,18 @@ public class BDao {
 		upHit(strID);
 		
 		BDto dto = null;
-		Connection connection = null;
-		PreparedStatement preparedStatement = null;
+		Connection con = null;
+		PreparedStatement pstmt = null;
 		ResultSet resultSet = null;
 		
 		try {
 			
-			connection = dataSource.getConnection();
+			con = dataSource.getConnection();
 			
 			String query = "select * from mvc_board where bId = ?";
-			preparedStatement = connection.prepareStatement(query);
-			preparedStatement.setInt(1, Integer.parseInt(strID));
-			resultSet = preparedStatement.executeQuery();
+			pstmt = con.prepareStatement(query);
+			pstmt.setInt(1, Integer.parseInt(strID));
+			resultSet = pstmt.executeQuery();
 			
 			if(resultSet.next()) {
 				int bId = resultSet.getInt("bId");
@@ -136,8 +136,8 @@ public class BDao {
 		} finally {
 			try {
 				if(resultSet != null) resultSet.close();
-				if(preparedStatement != null) preparedStatement.close();
-				if(connection != null) connection.close();
+				if(pstmt != null) pstmt.close();
+				if(con != null) con.close();
 			} catch (Exception e2) {
 				e2.printStackTrace();
 			}
