@@ -5,11 +5,19 @@ import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.io.Serializable;
+import java.sql.Connection;
+import java.sql.DriverManager;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.sql.Statement;
 import java.util.HashSet;
 import java.util.Iterator;
 import java.util.Scanner;
-import java.sql.*;
 
+/*
+ * 	전화번호 관리 프로그램 구현 프로젝트
+ *  Version 0.8
+ */
 interface INIT_MENU
 {
 	int INPUT=1, SEARCH=2, DELETE=3, CHANGE=4, EXIT=5;
@@ -36,40 +44,20 @@ class MenuChoiceException extends Exception
 	}
 }
 
-class ChangeChoiceException extends Exception
-{
-	int wrongChoice;
-	
-	public ChangeChoiceException(int choice)
-	{
-		super("잘못된 선택이 이뤄졌습니다.");
-		wrongChoice=choice;		
-	}
-	
-	public void showWrongChoice()
-	{
-		System.out.println(wrongChoice+ " 에 해당하는 선택은 존재하지 않습니다.");
-	}
-}
-
 class PhoneInfo implements Serializable
 {
 	String name;
 	String phoneNumber;
-	String birth;
 	
-	public PhoneInfo(String name, String num, String birth)
+	public PhoneInfo(String name, String num)
 	{
 		this.name=name;
 		phoneNumber=num;
-		this.birth=birth;
 	}
 	public void showPhoneInfo()
 	{
 		System.out.println("name : " + name);
 		System.out.println("phone : " + phoneNumber);
-		if(birth!=null)
-			System.out.println("birth : " + birth);
 	}
 	
 	public int hashCode()
@@ -91,9 +79,9 @@ class PhoneUnivInfo extends PhoneInfo
 	String major;
 	int year;
 	
-	public PhoneUnivInfo(String name, String num, String birth, String major, int year)
+	public PhoneUnivInfo(String name, String num, String major, int year)
 	{
-		super(name, num, birth);
+		super(name, num);
 		this.major=major;
 		this.year=year;
 	}
@@ -109,9 +97,9 @@ class PhoneCompanyInfo extends PhoneInfo
 {
 	String company;
 	
-	public PhoneCompanyInfo(String name, String num, String birth, String company)
+	public PhoneCompanyInfo(String name, String num, String company)
 	{
-		super(name, num, birth);
+		super(name, num);
 		this.company=company;
 	}
 	
@@ -143,14 +131,11 @@ class PhoneBookManager
 	
 	private PhoneInfo readFriendInfo()
 	{
-		
 		System.out.print("이름 : ");
 		String name=MenuViewer.keyboard.nextLine();
 		System.out.print("전화번호 : ");
 		String phone=MenuViewer.keyboard.nextLine();
-		System.out.print("생년월일 : ");
-		String birth=MenuViewer.keyboard.nextLine();
-		return new PhoneInfo(name, phone, birth);		
+		return new PhoneInfo(name, phone);		
 	}
 	
 	private PhoneInfo readUnivFriendInfo()
@@ -159,14 +144,12 @@ class PhoneBookManager
 		String name=MenuViewer.keyboard.nextLine();
 		System.out.print("전화번호 : ");
 		String phone=MenuViewer.keyboard.nextLine();
-		System.out.print("생년월일 : ");
-		String birth=MenuViewer.keyboard.nextLine();
 		System.out.print("전공 : ");
 		String major=MenuViewer.keyboard.nextLine();
 		System.out.print("학년 : ");
 		int year=MenuViewer.keyboard.nextInt();
 		MenuViewer.keyboard.nextLine();
-		return new PhoneUnivInfo(name, phone, birth, major, year);
+		return new PhoneUnivInfo(name, phone, major, year);
 	}
 	
 	private PhoneInfo readCompanyFriendInfo()
@@ -175,17 +158,15 @@ class PhoneBookManager
 		String name=MenuViewer.keyboard.nextLine();
 		System.out.print("전화번호 : ");
 		String phone=MenuViewer.keyboard.nextLine();
-		System.out.print("생년월일 : ");
-		String birth=MenuViewer.keyboard.nextLine();
 		System.out.print("회사 : ");
 		String company=MenuViewer.keyboard.nextLine();
-		return new PhoneCompanyInfo(name, phone, birth, company);
+		return new PhoneCompanyInfo(name, phone, company);
 	}
 	
 	public void inputData() throws MenuChoiceException
 	{
 		System.out.println("데이터 입력을 시작합니다...");
-		System.out.println("1.일반, 2.대학, 3.회사");
+		System.out.println("1. 일반, 2. 대학, 3. 회사");
 		System.out.print("선택>> ");
 		int choice=MenuViewer.keyboard.nextInt();
 		MenuViewer.keyboard.nextLine();
@@ -254,64 +235,24 @@ class PhoneBookManager
 		System.out.println("해당하는 데이터가 존재하지 않습니다 . \n");
 	}
 	
-	public void changeData() throws ChangeChoiceException
+	public void changeData()
 	{
 		System.out.println("데이터 수정을 시작합니다...");
 		
 		System.out.print("이름 : ");
 		String name=MenuViewer.keyboard.nextLine();
+		
 		PhoneInfo info=search(name);
 		if(info==null)
 		{
 			System.out.println("해당하는 데이터가 존재하지 않습니다. \n");
-			return;
 		}
 		else
 		{
 			info.showPhoneInfo();
+			System.out.println("데이터 검색이 완료되었습니다. \n");			
 		}
-		
-		
-				
-		System.out.println("수정할 데이터를 선택하세요...");		
-		System.out.println("1.전화번호, 2.학과, 3.학년, 4.회사, 5.나가기");
-		System.out.print("선택>> ");
-		int choice=MenuViewer.keyboard.nextInt();
-		MenuViewer.keyboard.nextLine();
-		PhoneInfo info1=null;
-		
-		if(choice< 1|| choice>5)		
-		throw new ChangeChoiceException(choice);
-		switch(choice)
-		{
-		case 1 :
-			String phone=MenuViewer.keyboard.nextLine();
-			break;
-		case 2 :
-			String major=MenuViewer.keyboard.nextLine();
-			break;
-		case 3 :
-			int year=MenuViewer.keyboard.nextInt();
-			break;
-		case 4 :
-			String company=MenuViewer.keyboard.nextLine();
-			break;
-		case 5 :
-			
-			return;
-//			PhoneBookManager manager = null;
-//			manager.storeToFile();
-//			System.out.println("메인 화면으로 돌아갑니다.");
-
-		}
-		System.out.println("데이터 수정이 완료되었습니다. \n");
-		}
-		
-
-
-			
-	
-	
+	}
 	
 	private PhoneInfo search(String name)
 	{
@@ -391,9 +332,17 @@ class MenuViewer
 }
 	
 class PhoneBookVer10
-{		
-	public static void main(String[] args) throws ChangeChoiceException 
-	{	
+{
+	
+	
+	public static void main(String[] args) 
+	{
+		 Connection conn = null; // DB연결된 상태(세션)을 담은 객체
+	     PreparedStatement pstm = null;  // SQL 문을 나타내는 객체
+	     ResultSet rs = null;  // 쿼리문을 날린것에 대한 반환값을 담을 객체
+	     
+	     
+
 		PhoneBookManager manager=PhoneBookManager.createManagerInst();
 		int choice;
 		
@@ -407,8 +356,6 @@ class PhoneBookVer10
 				
 				if(choice<INIT_MENU.INPUT || choice>INIT_MENU.EXIT)
 					throw new MenuChoiceException(choice);
-				if(choice< 1 || choice>5)		
-					throw new ChangeChoiceException(choice);
 	
 				switch(choice)
 				{
@@ -423,7 +370,7 @@ class PhoneBookVer10
 					break;
 				case INIT_MENU.CHANGE :
 					manager.changeData();
-					break;
+					break;	
 				case INIT_MENU.EXIT :
 					manager.storeToFile();
 					System.out.println("프로그램을 종료합니다.");
@@ -438,4 +385,3 @@ class PhoneBookVer10
 		}
 	}
 }
-

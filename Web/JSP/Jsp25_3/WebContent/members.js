@@ -1,4 +1,3 @@
-
 function infoConfirm() {
 	if(document.reg_frm.id.value.length == 0) {
 		alert("아이디는 필수사항입니다.");
@@ -7,7 +6,7 @@ function infoConfirm() {
 	}
 	
 	if(document.reg_frm.id.value.length < 4) {
-		alert("아이디는 4글자 이상이어야 합니다..");
+		alert("아이디는 4글자 이상이어야 합니다.");
 		reg_frm.id.focus();
 		return;
 	}
@@ -30,12 +29,6 @@ function infoConfirm() {
 		return;
 	}
 	
-	if(document.reg_frm.id.value.length == 0) {
-		alert("아이디는 필수 사항입니다..");
-		reg_frm.id.focus();
-		return;
-	}
-	
 	if(document.reg_frm.eMail.value.length == 0) {
 		alert("메일은 필수사항입니다.");
 		reg_frm.eMail.focus();
@@ -52,15 +45,15 @@ function updateInfoConfirm() {
 		return;
 	}
 	
-	if(document.reg_frm.pw.value != document.reg_frm.pw_check.value) {
+	if(document.reg_frm.pw.value != document.reg_frm.pw_check.value){
 		alert("패스워드가 일치하지 않습니다.");
-		reg_frm.pw.focus();
+		reg_fm.pw.foucus();
 		return;
 	}
 	
-	if(document.reg_frm.eMail.value.length == 0 ) {
-		alert("메일은 필수사항입니다..");
-		reg_frm.eMail.focus();
+	if(document.reg_frm.eMail.value.length == 0) {
+		alert("메일은 필수사항입니다.");
+		reg_frm.email.focus();
 		return;
 	}
 	

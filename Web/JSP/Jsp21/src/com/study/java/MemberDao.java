@@ -32,7 +32,7 @@ public class MemberDao {
 		
 		Connection con = null;
 		PreparedStatement pstmt = null;
-		String query = "insert into members values(?, ?, ?, ?, ?)";
+		String query = "insert into members values(?, ?, ?, ?, ?, ?)";
 		
 		try {
 			con = getConnection();
@@ -66,7 +66,7 @@ public class MemberDao {
 		Connection con = null;
 		PreparedStatement pstmt = null;
 		ResultSet set = null;
-		String query = "select id from members where is = ?";
+		String query = "select id from members where id = ?";
 		
 		try {
 			con = getConnection();
@@ -99,7 +99,7 @@ public class MemberDao {
 		Connection con = null;
 		PreparedStatement pstmt = null;
 		ResultSet set = null;
-		String query = "select id from members where is = ?";
+		String query = "select pw from members where id = ?";
 		
 		try {
 			con = getConnection();
@@ -176,7 +176,7 @@ public class MemberDao {
 		
 		Connection con = null;
 		PreparedStatement pstmt = null;
-		String query = "update member set pw=?, eMail=?, address=? where id?";
+		String query = "update members set pw=?, eMail=?, address=? where id=?";
 		
 		try {
 			con = getConnection();
@@ -206,7 +206,7 @@ public class MemberDao {
 		Connection con = null;
 		try {
 			context = new InitialContext();
-			dataSource = (DataSource)context.lookup("java:com/env/jdbc/Oracle11g");
+			dataSource = (DataSource)context.lookup("java:comp/env/jdbc/Oracle11g");
 			con = dataSource.getConnection();
 		} catch(Exception e) {
 			e.printStackTrace();

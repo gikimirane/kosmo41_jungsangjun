@@ -20,9 +20,7 @@
 </head>
 <body>
 
-	<table class="table table-striped">
-	 <thead>
-	<table width="500" cellpadding="0" cellspacing="0" border="1">
+	<table class="table table-striped" width="500" >
 		<tr>
 			 <th scope="col">번호</th>
      		 <th scope="col">이름</th>
@@ -43,30 +41,68 @@
 		</c:forEach>
 		<tr>
 			<td colspan="5"><a href="write_view.do">글작성</a> </td>
-		</tr>
+			</tr>
 		<tr>
 			<td colspan="5">
-	<nav aria-label="Page navigation example">
-  	<ul class="pagination">
-    <li class="page-item"><a class="page-link" href="#">First</a></li>
-    <li class="page-item"><a class="page-link" href="#">Prev</a></li>
-    <li class="page-item"><a class="page-link" href="#">1</a></li>
-    <li class="page-item"><a class="page-link" href="#">2</a></li>
-    <li class="page-item"><a class="page-link" href="#">3</a></li>
-    <li class="page-item"><a class="page-link" href="#">4</a></li>
-    <li class="page-item"><a class="page-link" href="#">5</a></li>
-    <li class="page-item"><a class="page-link" href="#">6</a></li>
-    <li class="page-item"><a class="page-link" href="#">7</a></li>
-    <li class="page-item"><a class="page-link" href="#">Next</a></li>
-    <li class="page-item"><a class="page-link" href="#">End</a></li>
-  </ul>
-</nav>
+			<nav aria-label="Page navigation example">
+			 <ul class="pagination">
+			<!-- 처음 -->
+			<c:choose>
+				<c:when test="${(page.curPage - 1) < 1}">
+					<li class="page-item"><a class="page-link" href="list.do?page=1">First</a></li>
+				</c:when>
+				<c:otherwise>
+					 <li class="page-item"><a class="page-link" href="list.do?page=1">First</a></li>
+				</c:otherwise>
+			</c:choose>
+			
+			<!-- 이전 -->
+			<c:choose>
+				<c:when test="${(page.curPage - 1) < 1}">
+					 <li class="page-item"><a class="page-link" href="list.do?page=${page.curPage - 1}">Prev</a></li>
+				</c:when>
+				<c:otherwise>
+					 <li class="page-item"><a class="page-link" href="list.do?page=${page.curPage - 1}">Prev</a></li>
+				</c:otherwise>
+			</c:choose>
+			
+			<!-- 개별 페이지 -->
+			<c:forEach var="fEach" begin="${page.startPage}" end="${page.endPage}" step="1">
+				<c:choose>
+					<c:when test="${page.curPage == fEach}">
+						[${fEach}] &nbsp;
+					</c:when>
+					<c:otherwise>
+						 <li class="page-item"><a class="page-link" href="list.do?page=${fEach}">${fEach}</a></li>&nbsp;
+					</c:otherwise>
+				</c:choose>
+			</c:forEach>
+			
+			<!-- 다음 -->
+			<c:choose>
+				<c:when test="${(page.curPage + 1) > page.totalPage}">
+					 <li class="page-item"><a class="page-link" href="list.do?page=${page.curPage + 1}">Next</a></li>
+				</c:when>
+				<c:otherwise>
+					 <li class="page-item"><a class="page-link" href="list.do?page=${page.curPage + 1}">Next</a></li>
+				</c:otherwise>
+			</c:choose>
+			<!-- 끝 -->
+			<c:choose>
+				<c:when test="${page.curPage == page.totalPage}">
+					 <li class="page-item"><a class="page-link" href="list.do?page=${page.totalPage}">End</a></li>
+				</c:when>
+				<c:otherwise>
+					 <li class="page-item"><a class="page-link" href="list.do?page=${page.totalPage}">End</a></li>
+				</c:otherwise>
+			</c:choose>
+			</ul>
+			</nav>
 
 			</td>
 		</tr>
 	</table>
-	 </thead>
- 	</table>	
+	
 	totalCount : ${page.totalCount}<br>
 	listCount : ${page.listCount}<br>
 	totalPage : ${page.totalPage}<br>	

@@ -17,8 +17,7 @@
 							out.println(session.getAttribute("id"));
 							%>"> <br>
 				
-		비밀번호 : <input type="password" name="pw"><br><p>
-		
+		비밀번호 : <input type="password" name="pw"><br><p>	
 		<input type="submit" value="로그인" >&nbsp;&nbsp;
 		<input type="button" value="회원가입" onclick="javascript:window.location='join.jsp'">
 	</form>

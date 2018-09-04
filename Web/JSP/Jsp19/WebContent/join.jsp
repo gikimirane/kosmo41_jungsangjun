@@ -14,11 +14,11 @@
 		이름 : <input type="text" name="name" size="10"><br>
 		전화번호 : <select name ="phone1">
 			<option value="010">010</option> 
+			<option value="011">011</option>	
 			<option value="016">016</option>
 			<option value="017">017</option>
 			<option value="018">018</option>
-			<option value="019">019</option>
-			<option value="011">011</option>	
+			<option value="019">019</option>	
 		</select> -
 		<input type="text" name="phone2" size="5"> - 
 		<input type="text" name="phone3" size="5"> <br>

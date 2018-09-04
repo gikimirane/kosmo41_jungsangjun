@@ -60,7 +60,7 @@
 						[ ${fEach} ] &nbsp;
 					</c:when>
 					<c:otherwise>
-						<a href="list.do?page=${fEach}">[ ${fEach} ]</a>]&nbsp;
+						<a href="list.do?page=${fEach}">[ ${fEach} ]</a>&nbsp;
 					</c:otherwise>
 				</c:choose>
 			</c:forEach>
