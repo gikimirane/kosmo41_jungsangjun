@@ -17,6 +17,7 @@
 <script language="JavaScript" src="AAAAA.js"></script>
 </head>
 <body>
+<center>
 	<form action="modifyOk.do" method="post" name="reg_frm">
 		아이디 : <%= dto.getId() %><br>
 		비밀번호 : <input type="password" name ="pw" size="20"><br>
@@ -27,5 +28,6 @@
 		<input type="button"  value="수정" onclick="updateInfoConfirm()">&nbsp;&nbsp;&nbsp;
 		<input type="reset" value="취소" onclick="javadcript:window.location='main.jsp'">			
 	</form>
+</center>
 </body>
 </html>

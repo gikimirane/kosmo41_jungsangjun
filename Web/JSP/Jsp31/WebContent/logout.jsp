@@ -7,9 +7,9 @@
 <title>Insert title here</title>
 </head>
 <body>
-	<form action="fileFormOk.jsp"method="post" enctype="multipart/form-data">
-		파일 : <input type="file" name="filename"><br />
-		<input type="submit" value="File upload">
-	</form>
+	<%
+		session.invalidate();
+		response.sendRedirect("login");
+	%>
 </body>
 </html>

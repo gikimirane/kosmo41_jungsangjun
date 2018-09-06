@@ -1,5 +1,5 @@
-<%@page import="com.study.jsp.MemberDto" %>
-<%@page import="com.study.jsp.MemberDao" %>
+<%@page import="com.study.jsp2.MemberDto" %>
+<%@page import="com.study.jsp2.MemberDao" %>
 <%@ page language="java" contentType="text/html; charset=UTF-8"
     pageEncoding="UTF-8"%>
 <%
