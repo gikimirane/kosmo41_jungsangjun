@@ -15,7 +15,7 @@ public class BContentCommand implements BCommand {
 		String bId = request.getParameter("bId");
 		BDao dao = BDao.getInstance();
 		BDto dto = dao.contentView(bId);
-		download.do = com.board.action.DownloadAction;
+//		download.do = com.study.jsp.DownloadAction;
 
 		request.setAttribute("content_view", dto);
 	}

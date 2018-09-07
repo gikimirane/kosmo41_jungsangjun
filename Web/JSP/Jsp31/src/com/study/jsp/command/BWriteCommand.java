@@ -28,14 +28,14 @@ public class BWriteCommand implements BCommand
          } catch (Exception e) {
                 e.printStackTrace();
          } 
-        String fileName = multi.getFilesystemName("fileName");	 
+        String filename = multi.getFilesystemName("filename");	 
         
 		String bName = multi.getParameter("bName");
 		String bTitle = multi.getParameter("bTitle");
 		String bContent = multi.getParameter("bContent");
 	   
 		BDao dao = BDao.getInstance();
-		dao.write(bName, bTitle, bContent);
+		dao.write(bName, bTitle, bContent, filename);
 	}
 
 }

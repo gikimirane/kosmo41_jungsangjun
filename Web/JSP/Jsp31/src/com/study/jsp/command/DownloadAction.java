@@ -9,6 +9,8 @@ import java.rmi.ServerException;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+
+import com.study.jsp.BDao;
  
 
  
@@ -26,7 +28,7 @@ public class DownloadAction implements BCommand {
         BDao = BDao.getInstance().getArticle(bid);
 
         // 파일 이름을 받아서
-        String filename = article.getFilename();
+        String filename = multi.getFilename();
 
         // 실제 파일이 들어있는 경로에 설정한 
         // upload폴더와 파일 이름을 붙여서

@@ -11,7 +11,7 @@
 <body>
 <center>
 	<table class="table table-striped">
-		<form action="write.do" method="post" enctype="Multipart/form-data">
+		<form action="write.do" method="post" enctype="Multipart/form-data" onsubmit="return formCheck();">
 			<tr>
 				<td>이름</td>
 				<td><input type="text" name="bName" size = "50"></td>
@@ -35,7 +35,7 @@
 			</tr>
 			<tr>
 				<td>파일</td>
-				<td><input type="file" name="fileName"></td>
+				<td><input type="file" name="filename"></td>
 			</tr>
 			<tr>
 				<td colspan="2">

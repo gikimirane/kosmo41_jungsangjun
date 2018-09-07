@@ -31,13 +31,13 @@ public class BDao {
 		return instance;
 	}
 	
-	public void write(String bName, String bTitle, String bContent) {
+	public void write(String bName, String bTitle, String bContent, String filename) {
 		Connection con = null;
 		PreparedStatement pstmt = null;
 		String query = 	"insert into mvc_board " +
-						"(bId, bName, bTitle, bContent, bHit, bGroup, bStep, bIndent)" +
+						"(bId, bName, bTitle, bContent, bHit, bGroup, bStep, bIndent, filename)" +
 						"values "+
-						"(mvc_board_seq.nextval, ?, ?, ?, 0, mvc_board_seq.currval, 0, 0 )";
+						"(mvc_board_seq.nextval, ?, ?, ?, 0, mvc_board_seq.currval, 0, 0, ?)";
 	
 		try 
 			{		
@@ -46,6 +46,7 @@ public class BDao {
 			pstmt.setString(1, bName);
 			pstmt.setString(2, bTitle);
 			pstmt.setString(3, bContent);
+			pstmt.setString(4, filename);
 			int rn = pstmt.executeUpdate();		
 		} catch(Exception e) {
 			e.printStackTrace();
@@ -99,9 +100,10 @@ public class BDao {
 				int bGroup = resultSet.getInt("bGroup");
 				int bStep = resultSet.getInt("bStep");
 				int bIndent = resultSet.getInt("bIndent");
+				String filename = resultSet.getString("filename");
 				
 				BDto dto= new BDto(bId, bName, bTitle, bContent, bDate, 
-									bHit, bGroup, bStep, bIndent);
+									bHit, bGroup, bStep, bIndent, filename);
 				
 				dtos.add(dto);
 			}
@@ -208,9 +210,10 @@ public class BDao {
 				int bGroup = resultSet.getInt("bGroup");
 				int bStep = resultSet.getInt("bStep");
 				int bIndent = resultSet.getInt("bIndent");
+				String filename = resultSet.getString("filename");
 				
 				dto= new BDto(bId, bName, bTitle, bContent, bDate, 
-						bHit, bGroup, bStep, bIndent);
+						bHit, bGroup, bStep, bIndent, filename);
 			}
 			
 		} catch(Exception e) {
@@ -245,7 +248,7 @@ public class BDao {
 		return con;
 	}
 	
-	public void modify(String bId, String bName, String bTitle, String bContent) {
+	public void modify(String bId, String bName, String bTitle, String bContent, String filename) {
 	
 		Connection con = null;
 		PreparedStatement pstmt = null;
@@ -254,6 +257,7 @@ public class BDao {
 						" set bName = ?, " +
 						"     bTitle = ?, " +
 						"	  bContent = ? " +
+						"	  filename = ? " +
 						"     where bId = ?";
 		try 
 			{		
@@ -262,7 +266,8 @@ public class BDao {
 			pstmt.setString(1, bName);
 			pstmt.setString(2, bTitle);
 			pstmt.setString(3, bContent);
-			pstmt.setString(4, bId);
+			pstmt.setString(4, filename);
+			pstmt.setString(5, bId);
 			int rn = pstmt.executeUpdate();		
 		} catch(Exception e) {
 			e.printStackTrace();
@@ -345,9 +350,10 @@ public class BDao {
 				int bGroup = resultSet.getInt("bGroup");
 				int bStep = resultSet.getInt("bStep");
 				int bIndent = resultSet.getInt("bIndent");
+				String filename = resultSet.getString("filename");
 				
 				dto= new BDto(bId, bName, bTitle, bContent, bDate, 
-						bHit, bGroup, bStep, bIndent);
+						bHit, bGroup, bStep, bIndent, filename);
 			}
 		} catch(Exception e) {
 			e.printStackTrace();
@@ -363,7 +369,7 @@ public class BDao {
 	}
 	
 	public void reply(String bId, String bName, String bTitle, String bContent, 
-			String bGroup, String bStep, String bIndent) 
+			String bGroup, String bStep, String bIndent, String filename) 
 	{
 		replyShape(bGroup, bStep);
 		
@@ -374,16 +380,17 @@ public class BDao {
 			{		
 			con = getConnection();
 			String query = 	"insert into mvc_board " +
-						"(bId, bName, bTitle, bContent, bGroup, bStep, bIndent)" +
-					"values (mvc_board_seq.nextval, ?, ?, ?, ?, ?, ?)";
+						"(bId, bName, bTitle, bContent, bGroup, bStep, bIndent, filename)" +
+					"values (mvc_board_seq.nextval, ?, ?, ?, ?, ?, ?, ?)";
 			pstmt = con.prepareStatement(query);
 			
 			pstmt.setString(1, bName);
 			pstmt.setString(2, bTitle);
 			pstmt.setString(3, bContent);
-			pstmt.setInt(4, Integer.parseInt(bGroup));
-			pstmt.setInt(5, Integer.parseInt(bStep) + 1);
-			pstmt.setInt(6, Integer.parseInt(bIndent) + 1);
+			pstmt.setString(4, filename);
+			pstmt.setInt(5, Integer.parseInt(bGroup));
+			pstmt.setInt(6, Integer.parseInt(bStep) + 1);
+			pstmt.setInt(7, Integer.parseInt(bIndent) + 1);
 			
 			int rn = pstmt.executeUpdate();		
 		} catch(Exception e) {

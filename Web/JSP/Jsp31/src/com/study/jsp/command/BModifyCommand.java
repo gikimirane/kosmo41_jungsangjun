@@ -28,7 +28,7 @@ public class BModifyCommand implements BCommand
 	         } catch (Exception e) {
 	                e.printStackTrace();
 	         } 
-	        String fileName = multi.getFilesystemName("fileName");	 
+	        String filename = multi.getFilesystemName("filename");	 
 		
 	        String bId = multi.getParameter("bId");
 	        String bName = multi.getParameter("bName");
@@ -36,7 +36,7 @@ public class BModifyCommand implements BCommand
 	        String bContent = multi.getParameter("bContent");
 		
 		BDao dao = BDao.getInstance();
-		dao.modify(bId, bName, bTitle, bContent);
+		dao.modify(bId, bName, bTitle, bContent, filename);
 	}
 
 }
