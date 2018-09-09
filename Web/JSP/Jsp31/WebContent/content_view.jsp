@@ -4,13 +4,12 @@
 <html>
 <head>
 <title>Insert title here</title>
-<script>
-
-function onDownload(bid) {var o = document.getElementById("ifrm_filedown");	
-o.src = "download.do?idx="+bid;}
-</script>	
-
 <meta charset="UTF-8"> 
+<script>
+function onDownload(bId) {
+	var o = document.getElementById("ifrm_filedown");	
+	o.src = "download.do?bId="+bId;}
+</script>	
 </head>
 <body>
 <iframe id="ifrm_filedown" style="position:absolute; 
@@ -38,9 +37,13 @@ z-index:1; visibility:hidden;"></iframe>
 				<td>${content_view.bContent}</td>
 			</tr>
 			<tr>
-				<th colspan="2">첨부파일</th>
+				<th colspan="2">첨부파일</th>			
+				<td colspan="8">			
+					<a href="#" onclick="onDownload('${content_view.bId}')">${content_view.filename}</a>&nbsp;	
+				</tr>
+			<tr>
 				<td colspan="2">
-				<a href="#" onclick="onDownload('${content_view.bid}')">${content_view.filename}</a>&nbsp;
+									
 				<a href="modify_view.do?bId=${content_view.bId}">[수정]</a>&nbsp;
 				<a href="list.do?page=<%= session.getAttribute("cpage") %>">[목록보기]</a>&nbsp;	
 				<a href="delete.do?bId=${content_view.bId}">[삭제]</a>&nbsp;

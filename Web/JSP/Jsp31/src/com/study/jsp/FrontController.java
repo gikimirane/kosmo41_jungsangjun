@@ -13,6 +13,7 @@ import javax.servlet.http.HttpSession;
 import com.study.jsp.command.BCommand;
 import com.study.jsp.command.BContentCommand;
 import com.study.jsp.command.BDeleteCommand;
+import com.study.jsp.command.BDownloadCommand;
 import com.study.jsp.command.BListCommand;
 import com.study.jsp.command.BModifyCommand;
 import com.study.jsp.command.BReplyCommand;
@@ -73,16 +74,15 @@ public class FrontController extends HttpServlet {
 	
 		if (com.equals("/write_view.do")) {
 			viewPage = "write_view.jsp";
-			
-		} else if (com.equals("/fileFormOk.jsp")) {
-			command = new BWriteCommand();
-			command.execute(request, response);
-			viewPage = "write_view.jsp";
-			
+						
 		} else if (com.equals("/write.do")) {
 			command = new BWriteCommand();
 			command.execute(request, response);
 			viewPage = "list.do";
+			
+		} else if (com.equals("/download.do")) {
+			command = new BDownloadCommand();
+			command.execute(request, response);
 			
 		} else if (com.equals("/list.do")) {
 			command = new BListCommand();

@@ -8,6 +8,7 @@ import java.util.ArrayList;
 
 import javax.naming.Context;
 import javax.naming.InitialContext;
+import javax.servlet.http.HttpServletRequest;
 import javax.sql.DataSource;
 
 public class BDao {
@@ -79,7 +80,7 @@ public class BDao {
 						   " 	select rownum num, A.* " +
 						   "		from ( " +
 						   "			select * " +
-						   "			  from mvc_board " +//검색기능 추가시 이밑에다 넣기
+						   "			  from mvc_board " +//검색기능 추가시 이밑에다 넣기if else 문 넣어서 만들기
 						   " 	         order by bgroup desc, bstep asc) A " +
 						   "		where rownum <= ?) B " +
 						   "	where B.num >= ? ";
@@ -184,7 +185,7 @@ public class BDao {
 		return pinfo;
 	}
 	
-	public BDto contentView(String strID) {
+	public BDto contentView(String strID, HttpServletRequest request) {
 		//upHit(strID)
 		
 		BDto dto = null;

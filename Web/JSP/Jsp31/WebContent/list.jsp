@@ -17,6 +17,16 @@
 	}
 	
 </style>
+<style>
+	 function check() {
+        if (document.search.keyWord.value == "") {
+            alert("검색어를 입력하세요.");
+            document.search.keyWord.focus();
+            return;
+        }
+        document.search.submit();
+    }
+</style>
 </head>
 <body>
 <center>
@@ -43,6 +53,17 @@
 			<td colspan="5"><a href="write_view.do">글작성</a> </td>
 			</tr>
 		<tr>
+		<form action="list.do" name="search" method="post">
+    		<select name="keyField" size="1">
+          	  <option value="name" <c:if test="${'bName'==keyField }"> selected</c:if>> 이름 </option>
+          	  <option value="title" <c:if test="${'bTitle'==keyField }"> selected</c:if>> 제목 </option>
+          	  <option value="content" <c:if test="${'bContent'==keyField }"> selected</c:if>> 내용 </option>
+          	  <option value="titlecontent" <c:if test="${'bTitlebContent' ==keyField }"> selected</c:if>> 제목 + 내용 </option>
+			</select>
+        		<input type="text" size="16" name="keyWord" value="${keyWord }">
+           		<input type="button" value="검색" onClick="check()">
+           		<input type="hidden" name="page" value="0"></td>   
+   		 </form>
 			<td colspan="5">
 			<nav aria-label="Page navigation example">
 			 <ul class="pagination">

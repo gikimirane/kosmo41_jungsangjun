@@ -14,10 +14,18 @@
 		document.modify_form.submit();
 	}
 </script>
+<script>
+function onDownload(bId) {
+	var o = document.getElementById("ifrm_filedown");	
+	o.src = "download.do?bId="+bId;}
+</script>
 <body>
+<iframe id="ifrm_filedown" style="position:absolute; 
+z-index:1; visibility:hidden;"></iframe>  
+
 <center>
 	<table class="table table-striped" width="800">
-		<form name ="modify_form" action="modify.do" method="post" enctype="Multipart/form-data" onsubmit="return formCheck();">
+		<form name ="modify_form" action="modify.do" method="post" enctype="Multipart/form-data">
 			<input type="hidden" name="bId" value="${content_view.bId}">
 			<tr>
 				<td>번호</td>

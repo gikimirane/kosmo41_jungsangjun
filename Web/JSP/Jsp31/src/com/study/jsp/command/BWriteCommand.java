@@ -28,6 +28,7 @@ public class BWriteCommand implements BCommand
          } catch (Exception e) {
                 e.printStackTrace();
          } 
+        
         String filename = multi.getFilesystemName("filename");	 
         
 		String bName = multi.getParameter("bName");
