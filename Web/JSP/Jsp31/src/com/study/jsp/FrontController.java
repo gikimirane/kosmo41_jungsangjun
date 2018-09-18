@@ -52,18 +52,22 @@ public class FrontController extends HttpServlet {
 		String conPath = request.getContextPath();
 		String com = uri.substring(conPath.length());
 		
-		if(com.equals("/loginOk.do")) {
+		if(com.equals("/loginOk.do")) {	// 로그인 
+
 			Service service = new loginOk();
 			service.execute(request, response);
-		}else if (com.equals("/modifyOk.do")) {
+			
+		}else if (com.equals("/modifyOk.do")) {	// 정보 수정
 			Service service = new modifyOk();
 			service.execute(request, response);
-		}else if (com.equals("/joinOk.do")) {
+		}else if (com.equals("/joinOk.do")) {	// 회원가입 
 			Service service = new joinOk();
 			service.execute(request, response);
-		}else if (com.equals("/logout.do")) {
+		}else if (com.equals("/logout.do")) {	// 로그아웃	
 			logout(request, response);
-		}		
+		}else if (com.equals("/bdelete.do")) {	// 회원탈퇴
+			bdelete(request, response);
+		}				
 		
 		HttpSession session = null;
 		session = request.getSession();
@@ -72,34 +76,34 @@ public class FrontController extends HttpServlet {
 			curPage = (int)session.getAttribute("cpage");
 		}
 	
-		if (com.equals("/write_view.do")) {
+		if (com.equals("/write_view.do")) {	// 글쓰기 메뉴
 			viewPage = "write_view.jsp";
-						
-		} else if (com.equals("/write.do")) {
+			
+		} else if (com.equals("/write.do")) {	// 글쓰기 버튼
 			command = new BWriteCommand();
 			command.execute(request, response);
 			viewPage = "list.do";
 			
-		} else if (com.equals("/download.do")) {
-			command = new BDownloadCommand();
-			command.execute(request, response);
-			
-		} else if (com.equals("/list.do")) {
+		} else if (com.equals("/list.do")) {	// 리스트
 			command = new BListCommand();
 			command.execute(request, response);
 			viewPage = "list.jsp";
 			
-		} else if (com.equals("/content_view.do")) {
+		} else if (com.equals("/content_view.do")) {	//글 조회 메뉴
 			command = new BContentCommand();
 			command.execute(request, response);
 			viewPage = "content_view.jsp";
 			
-		} else if (com.equals("/modify_view.do")) {
+		} else if (com.equals("/download.do")) {	// 다운로드 
+			command = new BDownloadCommand();
+			command.execute(request, response);
+			
+		} else if (com.equals("/modify_view.do")) {	// 수정 글 보기
 			command = new BContentCommand();
 			command.execute(request, response);
 			viewPage = "modify_view.jsp";
 			
-		} else if (com.equals("/modify.do")) {
+		} else if (com.equals("/modify.do")) { // 수정 글보기
 			command = new BModifyCommand();
 			command.execute(request, response);
 			
@@ -107,17 +111,17 @@ public class FrontController extends HttpServlet {
 			command.execute(request, response);
 			viewPage = "content_view.jsp";
 			
-		} else if (com.equals("/delete.do")) {
+		} else if (com.equals("/delete.do")) {	//글 삭제
 			command = new BDeleteCommand();
 			command.execute(request, response);
 			viewPage = "list.do?page="+curPage;
 			
-		} else if (com.equals("/reply_view.do")) {
+		} else if (com.equals("/reply_view.do")) { //답변 메뉴
 			command = new BReplyViewCommand();
 			command.execute(request, response);
 			viewPage = "reply_view.jsp";
 		
-		}else if (com.equals("/reply.do")) {
+		}else if (com.equals("/reply.do")) {	//답변 보기
 			command = new BReplyCommand();
 			command.execute(request, response);
 			viewPage = "list.do?page="+curPage;
@@ -126,15 +130,23 @@ public class FrontController extends HttpServlet {
 		RequestDispatcher dispatcher = request.getRequestDispatcher(viewPage);
 		dispatcher.forward(request, response);			
 	}
-	
+	private void bdelete(HttpServletRequest request, HttpServletResponse response) 
+			throws ServletException, IOException 
+	{
+		System.out.println("bdeleteOk");
+										// 회원탈퇴
+		HttpSession session = request.getSession();
+		session.invalidate();
+		response.sendRedirect("join.jsp");
+	}
+
 	public void logout(HttpServletRequest request, HttpServletResponse response)
 			throws ServletException, IOException 
 	{
 		System.out.println("logoutOk");
-		
+										// 로그아웃
 		HttpSession session = request.getSession();
 		session.invalidate();
 		response.sendRedirect("login.jsp");
 	}	
-	
 }

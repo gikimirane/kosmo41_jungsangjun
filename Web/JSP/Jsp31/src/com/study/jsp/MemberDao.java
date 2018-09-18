@@ -6,6 +6,7 @@ import java.sql.ResultSet;
 
 import javax.naming.Context;
 import javax.naming.InitialContext;
+import javax.servlet.http.HttpServletRequest;
 import javax.sql.DataSource;
 
 public class MemberDao {
@@ -18,10 +19,17 @@ public class MemberDao {
 	public static final int MEMBER_LOGIN_PW_SUCCESS = 1;
 	public static final int MEMBER_LOGIN_IS_NOT = -1;
 	
+	DataSource dataSource = null;
 	private static MemberDao instance = new MemberDao();
 	
 	private MemberDao() {
-		
+		try {
+			Context context = new InitialContext();
+			dataSource = (DataSource) context.lookup("java:comp/env/jdbc/Oracle11g");
+			
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
 	}
 	
 	public static MemberDao getInstance() {
@@ -48,7 +56,7 @@ public class MemberDao {
 		      ri = MemberDao.MEMBER_JOIN_SUCCESS;
 		}catch (Exception e) {
 			e.printStackTrace();
-			System.out.println("111111");
+			
 		} finally {
 			try {
 				if(pstmt != null) pstmt.close();
@@ -81,7 +89,7 @@ public class MemberDao {
 			}
 		} catch (Exception e) {
 			e.printStackTrace();
-			System.out.println("2222222");
+			
 		} finally {
 			try {
 				set.close();
@@ -95,7 +103,7 @@ public class MemberDao {
 		return ri;
 	}
 	
-	public int userCheck (String id, String pw) {
+	public int userCheck (String id, String pw, HttpServletRequest request) {
 		int ri = 0;
 		String dbPw;
 		
@@ -125,7 +133,7 @@ public class MemberDao {
 			}
 		} catch (Exception e) {
 			e.printStackTrace();
-			System.out.println("33333333");
+			
 		} finally {
 			try {
 				set.close();
@@ -162,7 +170,7 @@ public class MemberDao {
 			}
 		} catch (Exception e) {
 			e.printStackTrace();
-			System.out.println("444444");
+			
 		} finally {
 			try {
 				set.close();
@@ -193,7 +201,7 @@ public class MemberDao {
 		      ri = pstmt.executeUpdate();
 		} catch (Exception e) {
 			e.printStackTrace();
-			System.out.println("55555555");
+			
 		} finally {
 			try {
 				pstmt.close();
@@ -210,6 +218,7 @@ public class MemberDao {
 		Context context = null;
 		DataSource dataSource = null;
 		Connection con = null;
+		
 		try {
 			//lookup 함수의 파라메터는 context.xml에 설정된
 			// name(jdbc/Oracle11g)과 동일해야 한다.
@@ -218,12 +227,72 @@ public class MemberDao {
 			con = dataSource.getConnection();
 		} catch (Exception e) {
 			e.printStackTrace();
-			System.out.println("6666666");
+			
 		}
 		
 		return con;
 	}
-		
+	
+	public int delete(String id, String pw) 
+    {
+        Connection con = null;
+        PreparedStatement pstmt = null;
+        ResultSet set = null;
+ 
+        String dbpw = ""; // DB상의 비밀번호를 담아둘 변수
+        int x = -1;
+ 
+        try {
+            // 비밀번호 조회
+            StringBuffer query1 = new StringBuffer();
+            query1.append("SELECT PW FROM AAAAA WHERE ID=?");
+ 
+            // 회원 삭제
+            StringBuffer query2 = new StringBuffer();
+            query2.append("DELETE FROM AAAAA WHERE ID=?");
+ 
+            con = getConnection();
+ 
+            // 자동 커밋을 false로 한다.
+            con.setAutoCommit(false);
+            
+            // 1. 아이디에 해당하는 비밀번호를 조회한다.
+            pstmt = con.prepareStatement(query1.toString());
+            pstmt.setString(1, id);
+            set = pstmt.executeQuery();
+ 
+            if (set.next()) 
+            {
+                dbpw = set.getString("pw");
+                if (dbpw.equals(pw)) // 입력된 비밀번호와 DB비번 비교
+                {
+                    // 같을경우 회원삭제 진행
+                    pstmt = con.prepareStatement(query2.toString());
+                    pstmt.setString(1, id);
+                    pstmt.executeUpdate();
+                    con.commit(); 
+                    x = 1; // 삭제 성공
+                } else {
+                    x = 0; // 비밀번호 비교결과 - 다름
+                }
+            }
+ 
+            return x;
+ 
+        } catch (Exception e) {
+            try {
+                con.rollback(); // 오류시 롤백
+            } catch (Exception e2) {
+                e2.printStackTrace();
+            }
+            throw new RuntimeException(e.getMessage());
+        } finally {
+            try{
+                if ( pstmt != null ){ pstmt.close(); pstmt=null; }
+                if ( con != null ){ con.close(); con=null;    }
+            }catch(Exception e){
+                throw new RuntimeException(e.getMessage());
+            }
+        }
+    } // end delete
 }
-
-

@@ -6,10 +6,10 @@
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
 <title>Insert title here</title>
 </head>
-<body>
+<body class="container">
 	<%
 		session.invalidate();
-		response.sendRedirect("login");
+		response.sendRedirect("login.jsp");
 	%>
 </body>
 </html>

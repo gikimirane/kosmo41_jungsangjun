@@ -9,10 +9,11 @@ import java.util.ArrayList;
 import javax.naming.Context;
 import javax.naming.InitialContext;
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpSession;
 import javax.sql.DataSource;
 
 public class BDao {
-	
+
 	private static BDao instance = new BDao();
 	DataSource dataSource = null;
 	
@@ -23,6 +24,7 @@ public class BDao {
 		try {
 			Context context = new InitialContext();
 			dataSource = (DataSource) context.lookup("java:comp/env/jdbc/Oracle11g");
+			
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
@@ -32,22 +34,25 @@ public class BDao {
 		return instance;
 	}
 	
-	public void write(String bName, String bTitle, String bContent, String filename) {
+	public void write(String bName, String bTitle, String bContent, String filename, String bBoard) {
+		
 		Connection con = null;
 		PreparedStatement pstmt = null;
 		String query = 	"insert into mvc_board " +
-						"(bId, bName, bTitle, bContent, bHit, bGroup, bStep, bIndent, filename)" +
+						"(bId, bName, bTitle, bContent, bHit, bGroup, bStep, bIndent, filename, bBoard)" +
 						"values "+
-						"(mvc_board_seq.nextval, ?, ?, ?, 0, mvc_board_seq.currval, 0, 0, ?)";
+						"(mvc_board_seq.nextval, ?, ?, ?, 0, mvc_board_seq.currval, 0, 0, ?, ?)";
 	
 		try 
 			{		
-			con = getConnection();
+			con = dataSource.getConnection();
+			
 			pstmt = con.prepareStatement(query);
 			pstmt.setString(1, bName);
 			pstmt.setString(2, bTitle);
 			pstmt.setString(3, bContent);
 			pstmt.setString(4, filename);
+			pstmt.setString(5, bBoard);
 			int rn = pstmt.executeUpdate();		
 		} catch(Exception e) {
 			e.printStackTrace();
@@ -60,14 +65,16 @@ public class BDao {
 			}
 		}
 	}
-	
-	public ArrayList<BDto> list(int curPage)
+	// 게시물 작성
+		
+	public ArrayList<BDto> list(int curPage,String keyfield, String keyword, HttpServletRequest request)
+
 	{
 		ArrayList<BDto> dtos = new ArrayList<BDto>();
 		Connection con = null;
 		PreparedStatement pstmt = null;
 		ResultSet resultSet = null;
-		
+			
 		int nStart = (curPage - 1) * listCount + 1;
 		int nEnd = (curPage - 1) * listCount + listCount;
 			
@@ -75,21 +82,96 @@ public class BDao {
 			{
 			con = dataSource.getConnection();
 			
-			String query = "select * " +
-						   " from ( " +
-						   " 	select rownum num, A.* " +
-						   "		from ( " +
-						   "			select * " +
-						   "			  from mvc_board " +//검색기능 추가시 이밑에다 넣기if else 문 넣어서 만들기
-						   " 	         order by bgroup desc, bstep asc) A " +
-						   "		where rownum <= ?) B " +
-						   "	where B.num >= ? ";
-			
-			pstmt = con.prepareStatement(query);
-			pstmt.setInt(1, nEnd);
-			pstmt.setInt(2, nStart);
-			resultSet = pstmt.executeQuery();
-			
+			if(keyfield == null) {
+				String query ="select * " +
+						  	  "  from ( " +
+							  "	   select rownum num, A.* " +
+							  "	     from ( " +
+							  "	        select * " +
+							  "	          from mvc_board " +
+							  "	         order by bgroup desc, bstep asc ) A " +
+							  "	    where rownum <= ? ) B " +
+							  "	where B.num >= ? ";
+
+				pstmt=con.prepareStatement(query);
+				pstmt.setInt(1, nEnd);
+				pstmt.setInt(2, nStart);
+				}
+				else if(keyfield.equals("1")) //이름 검색
+				{	
+					String query ="select * " +
+						  	  "  from ( " +
+							  "	   select rownum num, A.* " +
+							  "	     from ( " +
+							  "	        select * " +
+							  "	          from mvc_board " +
+							  "				where bName like ?" +
+							  "	         order by bgroup desc, bstep asc ) A " +
+							  "	    where rownum <= ? ) B " +
+							  "	where B.num >= ? ";
+
+				pstmt=con.prepareStatement(query);
+				pstmt.setString(1, "%"+keyword+"%");
+				pstmt.setInt(2, nEnd);
+				pstmt.setInt(3, nStart);
+				}
+				else if (keyfield.equals("2"))	//제목 검색
+				{
+					String query ="select * " +
+						  	  "  from ( " +
+							  "	   select rownum num, A.* " +
+							  "	     from ( " +
+							  "	        select * " +
+							  "	          from mvc_board " +
+							  "             where bTitle like ? " +
+							  "	         order by bgroup desc, bstep asc ) A " +
+							  "	    where rownum <= ? ) B " +
+							  "	where B.num >= ? ";
+
+				pstmt=con.prepareStatement(query);
+				pstmt.setString(1, "%"+keyword+"%");
+				pstmt.setInt(2, nEnd);
+				pstmt.setInt(3, nStart);				
+				}				
+				else if (keyfield.equals("3"))	//내용 검색
+				{
+					String query ="select * " +
+						  	  "  from ( " +
+							  "	   select rownum num, A.* " +
+							  "	     from ( " +
+							  "	        select * " +
+							  "	          from mvc_board " +
+							  "             where bContent like ? " +
+							  "	         order by bgroup desc, bstep asc ) A " +
+							  "	    where rownum <= ? ) B " +
+							  "	where B.num >= ? ";
+
+				pstmt=con.prepareStatement(query);
+				pstmt.setString(1, "%"+keyword+"%");
+				pstmt.setInt(2, nEnd);
+				pstmt.setInt(3, nStart);				
+				}
+				else if (keyfield.equals("4"))	//제목 + 내용 검색
+				{
+					String query ="select * " +
+						  	  "  from ( " +
+							  "	   select rownum num, A.* " +
+							  "	     from ( " +
+							  "	        select * " +
+							  "	          from mvc_board " +
+							  "             where bTitle like ? or bContent like ? " +
+							  "	         order by bgroup desc, bstep asc ) A " +
+							  "	    where rownum <= ? ) B " +
+							  "	where B.num >= ? ";
+
+				pstmt=con.prepareStatement(query);
+				pstmt.setString(1, "%"+keyword+"%");
+				pstmt.setString(2, "%"+keyword+"%");
+				pstmt.setInt(3, nEnd);
+				pstmt.setInt(4, nStart);
+				}		
+				resultSet = pstmt.executeQuery();
+						
 			while(resultSet.next())
 			{
 				int bId = resultSet.getInt("bId");
@@ -102,9 +184,10 @@ public class BDao {
 				int bStep = resultSet.getInt("bStep");
 				int bIndent = resultSet.getInt("bIndent");
 				String filename = resultSet.getString("filename");
+				String bBoard = resultSet.getString("bBoard");
 				
 				BDto dto= new BDto(bId, bName, bTitle, bContent, bDate, 
-									bHit, bGroup, bStep, bIndent, filename);
+									bHit, bGroup, bStep, bIndent, filename, bBoard);
 				
 				dtos.add(dto);
 			}
@@ -123,21 +206,50 @@ public class BDao {
 		}
 		return dtos;
 	}
+	// 게시물 목록
 	
-	public BPageInfo articlePage(int curPage) {
+	public BPageInfo articlePage(int curPage, String keyfield, String keyword, HttpServletRequest request) {
 		Connection con = null;
 		PreparedStatement pstmt = null;
 		ResultSet resultSet = null;
-			
+		HttpSession session = request.getSession();
+		
 		//총 게시물의 갯수
 		int totalCount = 0;
 		try {
 			con = dataSource.getConnection();
-			
-			String query = "select count(*) as total from mvc_board";
-			pstmt = con.prepareStatement(query);
-			resultSet = pstmt.executeQuery();
-			
+								
+			if(keyfield == null) //전체글의 개수
+			{		
+				String query = "select count(*) as total from mvc_board";
+				pstmt=con.prepareStatement(query);				
+			}			
+			else if(keyfield.equals("1")) 	// 이름으로 검색한 글의 개수
+			{
+				String query = "select count(*) as total from mvc_board where bName like ?";
+				pstmt=con.prepareStatement(query);
+				pstmt.setString(1, "%"+keyword+"%");								
+			}
+			else if(keyfield.equals("2"))  // 제목으로 검색한 글의 개수
+			{
+				String query = "select count(*) as total from mvc_board where bTitle like ?";
+				pstmt=con.prepareStatement(query);
+				pstmt.setString(1, "%"+keyword+"%");		
+			}			
+			else if(keyfield.equals("3")) // 내용으로 검색한 글의 개수
+			{
+				String query = "select count(*) as total from mvc_board where bContent like ?";
+				pstmt=con.prepareStatement(query);
+				pstmt.setString(1, "%"+keyword+"%");				
+			}			
+			else if(keyfield.equals("4")) // 제목 + 내용으로 검색한 글의 개수
+			{
+				String query = "select count(*) as total from mvc_board where bTitle like ? or bContnet like ?";
+				pstmt=con.prepareStatement(query);
+				pstmt.setString(1, "%"+keyword+"%");	
+				pstmt.setString(2, "%"+keyword+"%");	
+			}					
+			resultSet = pstmt.executeQuery();					
 			if(resultSet.next()) {
 				totalCount = resultSet.getInt("total");
 			}
@@ -158,17 +270,17 @@ public class BDao {
 		if (totalCount % listCount > 0)
 		    totalPage++;
 		
-		// 현재 페이지
+		// 현재 페이지 번호
 		int myCurPage = curPage;
 		if (myCurPage > totalPage)
 			myCurPage = totalPage;
 		if (myCurPage < 1)
 			myCurPage = 1;
 		
-		// 시작 페이지
+		// 시작 페이지 번호
 		int startPage = ((myCurPage - 1) / pageCount) * pageCount + 1;
 		
-		//끝 페이지
+		//끝 페이지 번호
 		int endPage = startPage + pageCount - 1;
 		if (endPage > totalPage) 
 		    endPage = totalPage;
@@ -184,9 +296,10 @@ public class BDao {
 		
 		return pinfo;
 	}
+	// 게시물 페이지
 	
 	public BDto contentView(String strID, HttpServletRequest request) {
-		//upHit(strID)
+		//upHit(strId)
 		
 		BDto dto = null;
 		Connection con = null;
@@ -194,7 +307,7 @@ public class BDao {
 		ResultSet resultSet = null;
 		
 		try {
-			con = getConnection();
+			con = dataSource.getConnection();
 			
 			String query = 	"select * from mvc_board where bId = ?";
 			pstmt = con.prepareStatement(query);
@@ -212,9 +325,10 @@ public class BDao {
 				int bStep = resultSet.getInt("bStep");
 				int bIndent = resultSet.getInt("bIndent");
 				String filename = resultSet.getString("filename");
+				String bBoard = resultSet.getString("bBoard");
 				
 				dto= new BDto(bId, bName, bTitle, bContent, bDate, 
-						bHit, bGroup, bStep, bIndent, filename);
+						bHit, bGroup, bStep, bIndent, filename, bBoard);
 			}
 			
 		} catch(Exception e) {
@@ -230,45 +344,37 @@ public class BDao {
 		}
 		return dto;
 	}
+	// 게시물 보기
 	
-	private Connection getConnection() {
-		Context context = null;
-		DataSource dataSource = null;
-		Connection con = null;
-		
-		try {
-			// lookup 함수의 파라메터는 context.xml에 설정된
-			// name(jdbc/Oracle11g)과 동일해야 한다.
-			context = new InitialContext();
-			dataSource = (DataSource)context.lookup("java:comp/env/jdbc/Oracle11g");
-			con = dataSource.getConnection();
-		} catch (Exception e) {
-			e.printStackTrace();
-		}
-		
-		return con;
-	}
-	
-	public void modify(String bId, String bName, String bTitle, String bContent, String filename) {
+	public void modify(String bId, String bName, String bTitle, String bContent, String filename, String bBoard) {
 	
 		Connection con = null;
 		PreparedStatement pstmt = null;
 		
-		String query = 	"update mvc_board " +
-						" set bName = ?, " +
-						"     bTitle = ?, " +
-						"	  bContent = ? " +
-						"	  filename = ? " +
+		System.out.println("bId : " + bId);
+		System.out.println("bName : " + bName);
+		System.out.println("bTitle : " + bTitle);
+		System.out.println("bContent : " + bContent);
+		System.out.println("filename : " + filename);
+		System.out.println("bBoard : " + bBoard);
+			
+		String query = 	"update MVC_BOARD " +
+						" set BNAME = ?, " +
+						"     BTITLE = ?, " +
+						"	  BCONTENT = ?, " +
+						"     FILENAME = ?,  " +
+						"	  BBOARD = ? " +	
 						"     where bId = ?";
 		try 
 			{		
-			con = getConnection();
+			con = dataSource.getConnection();
 			pstmt = con.prepareStatement(query);
 			pstmt.setString(1, bName);
 			pstmt.setString(2, bTitle);
 			pstmt.setString(3, bContent);
 			pstmt.setString(4, filename);
-			pstmt.setString(5, bId);
+			pstmt.setString(5, bBoard);
+			pstmt.setString(6, bId);
 			int rn = pstmt.executeUpdate();		
 		} catch(Exception e) {
 			e.printStackTrace();
@@ -281,13 +387,15 @@ public class BDao {
 			}
 		}
 	}
+	// 게시물 수정
+	
 	private void upHit(String bId) {
 		Connection con = null;
 		PreparedStatement pstmt = null;	
 		
 		try {
-			con = getConnection();
-			String query = 	"updare mvc_board set bHit = bHit + 1 where bId = ?";
+			con = dataSource.getConnection();
+			String query = 	"update mvc_board set bHit = bHit + 1 where bId = ?";
 			pstmt = con.prepareStatement(query);
 			pstmt.setString(1, bId);
 			
@@ -304,13 +412,14 @@ public class BDao {
 			}
 		}		
 	}
+	// 게시물 조회
 	
 	public void delete(String bId) {
 		Connection con = null;
 		PreparedStatement pstmt = null;	
 		
 		try {
-			con = getConnection();
+			con = dataSource.getConnection();
 			String query = 	"delete from mvc_board where bId = ?";
 			pstmt = con.prepareStatement(query);
 			pstmt.setInt(1, Integer.parseInt(bId));
@@ -327,15 +436,16 @@ public class BDao {
 			}
 		}		
 	}
+	// 게시물 삭제
 	
-	public BDto reply_view(String str) {
+	public BDto reply_view(String str, HttpServletRequest request) {
 		BDto dto = null;
 		
 		Connection con = null;
 		PreparedStatement pstmt = null;
 		ResultSet resultSet = null;
 		try {
-			con = getConnection();
+			con = dataSource.getConnection();
 			String query = 	"select * from mvc_board where bId = ?";
 			pstmt = con.prepareStatement(query);
 			pstmt.setInt(1, Integer.parseInt(str));
@@ -352,9 +462,10 @@ public class BDao {
 				int bStep = resultSet.getInt("bStep");
 				int bIndent = resultSet.getInt("bIndent");
 				String filename = resultSet.getString("filename");
+				String bBoard = resultSet.getString("bBoard");
 				
 				dto= new BDto(bId, bName, bTitle, bContent, bDate, 
-						bHit, bGroup, bStep, bIndent, filename);
+						bHit, bGroup, bStep, bIndent, filename, bBoard);
 			}
 		} catch(Exception e) {
 			e.printStackTrace();
@@ -368,9 +479,10 @@ public class BDao {
 		}
 		return dto;
 	}
+	// 게시물 답변 보기
 	
 	public void reply(String bId, String bName, String bTitle, String bContent, 
-			String bGroup, String bStep, String bIndent, String filename) 
+			String bGroup, String bStep, String bIndent, String filename, String bBoard) 
 	{
 		replyShape(bGroup, bStep);
 		
@@ -379,19 +491,20 @@ public class BDao {
 	
 		try 
 			{		
-			con = getConnection();
+			con = dataSource.getConnection();
 			String query = 	"insert into mvc_board " +
-						"(bId, bName, bTitle, bContent, bGroup, bStep, bIndent, filename)" +
-					"values (mvc_board_seq.nextval, ?, ?, ?, ?, ?, ?, ?)";
+						"(bId, bName, bTitle, bContent, bGroup, bStep, bIndent, filename, bBoard)" +
+					"values (mvc_board_seq.nextval, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
 			pstmt = con.prepareStatement(query);
 			
 			pstmt.setString(1, bName);
 			pstmt.setString(2, bTitle);
 			pstmt.setString(3, bContent);
 			pstmt.setString(4, filename);
-			pstmt.setInt(5, Integer.parseInt(bGroup));
-			pstmt.setInt(6, Integer.parseInt(bStep) + 1);
-			pstmt.setInt(7, Integer.parseInt(bIndent) + 1);
+			pstmt.setString(5, bBoard);
+			pstmt.setInt(6, Integer.parseInt(bGroup));
+			pstmt.setInt(7, Integer.parseInt(bStep) + 1);
+			pstmt.setInt(8, Integer.parseInt(bIndent) + 1);
 			
 			int rn = pstmt.executeUpdate();		
 		} catch(Exception e) {
@@ -405,7 +518,7 @@ public class BDao {
 			}
 		}
 	}
-	
+	// 게시물 답변
 	private void replyShape(String strGroup, String strStep) 
 		{
 			Connection con = null;
@@ -413,7 +526,7 @@ public class BDao {
 
 			try 
 				{		
-				con = getConnection();
+				con = dataSource.getConnection();
 				String query = 	"update mvc_board " +
 								" set bStep = bStep + 1 " +
 								" where bGroup = ? and bStep > ?";
@@ -433,5 +546,5 @@ public class BDao {
 			}
 		}
 	}
-	
+	// 게시물 그룹
 }

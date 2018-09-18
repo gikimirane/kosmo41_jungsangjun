@@ -16,7 +16,7 @@
 <title>Insert title here</title>
 <script language="JavaScript" src="AAAAA.js"></script>
 </head>
-<body>
+<body class="container">
 <center>
 	<form action="modifyOk.do" method="post" name="reg_frm">
 		아이디 : <%= dto.getId() %><br>
@@ -26,7 +26,7 @@
 		메일 : <input type="text" name = "eMail" size="20" value="<%=dto.geteMail() %>"><br>
 		주소 : <input type="text" name = "address" size="50" value="<%=dto.getAddress() %>"><br><p>
 		<input type="button"  value="수정" onclick="updateInfoConfirm()">&nbsp;&nbsp;&nbsp;
-		<input type="reset" value="취소" onclick="javadcript:window.location='main.jsp'">			
+		<input type="reset" value="취소" onclick="javadcript:window.location='main.jsp'">&nbsp;&nbsp;&nbsp;				
 	</form>
 </center>
 </body>

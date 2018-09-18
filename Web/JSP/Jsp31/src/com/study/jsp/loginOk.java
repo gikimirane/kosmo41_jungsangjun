@@ -31,7 +31,7 @@ public class loginOk implements Service {
 			PrintWriter writer = response.getWriter();
 			
 			MemberDao dao = MemberDao.getInstance();
-			int checkNum = dao.userCheck(id, pw);
+			int checkNum = dao.userCheck(id, pw, request);
 			if(checkNum == -1) { 
 				//html 출력
 				writer.println("아이디가 존재하지 않습니다.");
@@ -60,8 +60,7 @@ public class loginOk implements Service {
 					"	</script>");
 					writer.println("</body></html>");
 					writer.close();
-					
-					
+									
 					response.sendRedirect("main.jsp");
 				}
 			}

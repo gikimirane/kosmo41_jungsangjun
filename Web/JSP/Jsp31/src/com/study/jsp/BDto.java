@@ -14,9 +14,10 @@ public class BDto {
 	int bStep;
 	int bIndent;
 	String filename;
+	String bBoard;
 	
 	public BDto(int bId, String bName, String bTitle, String bContent, 
-			Timestamp bDate, int bHit, int bGroup, int bStep, int bIndent, String filename)
+			Timestamp bDate, int bHit, int bGroup, int bStep, int bIndent, String filename, String bBoard)
 	{
 		this.bId = bId;
 		this.bName = bName;
@@ -28,6 +29,15 @@ public class BDto {
 		this.bStep = bStep;
 		this.bIndent = bIndent;
 		this.filename = filename;
+		this.bBoard	= bBoard;
+	}
+
+	public String getbBoard() {
+		return bBoard;
+	}
+
+	public void setbBoard(String bBoard) {
+		this.bBoard = bBoard;
 	}
 
 	public int getbId() {
@@ -109,5 +119,5 @@ public class BDto {
 	public void setFilename(String filename) {
 		this.filename = filename;
 	}
-	
+
 }

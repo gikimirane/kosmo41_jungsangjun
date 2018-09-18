@@ -12,7 +12,7 @@ public class BWriteCommand implements BCommand
 
 	@Override
 	public void execute(HttpServletRequest request, HttpServletResponse response) 
-	{
+	{		
         MultipartRequest multi = null;
         int sizeLimit = 10 * 1024 * 1024;
         String savePath = request.getSession().getServletContext().getRealPath("/fileFolder"); 
@@ -28,15 +28,14 @@ public class BWriteCommand implements BCommand
          } catch (Exception e) {
                 e.printStackTrace();
          } 
-        
-        String filename = multi.getFilesystemName("filename");	 
-        
+               
 		String bName = multi.getParameter("bName");
 		String bTitle = multi.getParameter("bTitle");
 		String bContent = multi.getParameter("bContent");
-	   
+		String filename = multi.getFilesystemName("filename");
+		String bBoard = multi.getFilesystemName("bBoard");
+		
 		BDao dao = BDao.getInstance();
-		dao.write(bName, bTitle, bContent, filename);
+		dao.write(bName, bTitle, bContent, filename, bBoard);
 	}
-
 }

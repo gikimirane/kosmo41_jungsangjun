@@ -11,7 +11,7 @@ function onDownload(bId) {
 	o.src = "download.do?bId="+bId;}
 </script>	
 </head>
-<body>
+<body class="container">
 <iframe id="ifrm_filedown" style="position:absolute; 
 z-index:1; visibility:hidden;"></iframe>         
 <center>	
@@ -35,15 +35,10 @@ z-index:1; visibility:hidden;"></iframe>
 			<tr>
 				<td> 내용 </td>
 				<td>${content_view.bContent}</td>
-			</tr>
-			<tr>
-				<th colspan="2">첨부파일</th>			
-				<td colspan="8">			
-					<a href="#" onclick="onDownload('${content_view.bId}')">${content_view.filename}</a>&nbsp;	
-				</tr>
+			</tr>		
 			<tr>
 				<td colspan="2">
-									
+				<a href="#" onclick="onDownload('${content_view.bId}')">${content_view.filename}</a>&nbsp;						
 				<a href="modify_view.do?bId=${content_view.bId}">[수정]</a>&nbsp;
 				<a href="list.do?page=<%= session.getAttribute("cpage") %>">[목록보기]</a>&nbsp;	
 				<a href="delete.do?bId=${content_view.bId}">[삭제]</a>&nbsp;

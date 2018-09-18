@@ -3,15 +3,14 @@
 <!DOCTYPE html>
 <html>
 <head>
-<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
-<title>Insert title here</title>
+	<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+	<title>Insert title here</title>
 <script src="https://cdn.ckeditor.com/4.10.0/standard/ckeditor.js"></script>
-	
 </head>
-<body>
+<body class="container">	
 <center>
 	<table class="table table-striped">
-		<form action="write.do" method="post" enctype="Multipart/form-data" onsubmit="return formCheck();">
+		<form action="write.do" method="post" enctype="Multipart/form-data">			
 			<tr>
 				<td>이름</td>
 				<td><input type="text" name="bName" size = "50"></td>
@@ -30,13 +29,13 @@
                 		// Replace the <textarea id="editor1"> with a CKEditor
                 		// instance, using default configuration.
                			CKEDITOR.replace( 'editor1' );
-            		</script>
+            		</script>       
 				</td>
 			</tr>
-			<tr>
-				<td>파일</td>
-				<td><input type="file" name="filename"></td>
-			</tr>
+				<tr>
+					<td>파일</td>
+					<td><input type="file" name="filename"></td>
+				</tr>
 			<tr>
 				<td colspan="2">
 					<input type="submit" value="입력"> &nbsp;&nbsp;

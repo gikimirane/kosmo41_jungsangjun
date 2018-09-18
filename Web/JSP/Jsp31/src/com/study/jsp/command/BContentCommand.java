@@ -17,6 +17,7 @@ public class BContentCommand implements BCommand {
 		BDto dto = dao.contentView(bId, request);
 
 		request.setAttribute("content_view", dto);
+		System.out.println("3333333");
 	}
 
 }

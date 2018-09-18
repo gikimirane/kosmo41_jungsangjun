@@ -48,7 +48,7 @@ public class WsServer2 {
 		
 		sendAllSessionToMessage(session, message);
 	}
-	
+	// 모든 사용자에게 메시지를 전달한다.
 	private void sendAllSessionToMessage(Session self, String message) {
 		try {
 			for(Session session : WsServer2.sessions) {

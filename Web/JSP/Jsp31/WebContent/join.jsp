@@ -4,10 +4,10 @@
 <html>
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
-<title>JSP/Servlet 21-1</title>
+<title>회원가입</title>	
 <script language="JavaScript" src="AAAAA.js"></script>
 </head>
-<body>
+<body class="container">
 <center>
 	<form action="joinOk.do" method="post" name="reg_frm">
 	아이디 : <input type="text" name = "id" size="20"><br>
@@ -19,6 +19,6 @@
 	<input type="button"  value="회원가입" onclick="infoConfirm()">&nbsp;&nbsp;&nbsp;
 	<input type="reset" value="로그인" onclick="javadcript:window.location='login.jsp'">			
 	</form>
-</center>
+</centent>
 </body>
 </html>

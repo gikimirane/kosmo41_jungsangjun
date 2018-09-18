@@ -19,7 +19,7 @@ function onDownload(bId) {
 	var o = document.getElementById("ifrm_filedown");	
 	o.src = "download.do?bId="+bId;}
 </script>
-<body>
+<body class="container">
 <iframe id="ifrm_filedown" style="position:absolute; 
 z-index:1; visibility:hidden;"></iframe>  
 
