@@ -1,0 +1,113 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".MainActivity">
+
+    <LinearLayout
+        android:id="@+id/tabLayout"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentTop="true"
+        android:orientation="horizontal">
+
+        <Button
+            android:id="@+id/button"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:background="@android:color/darker_gray"
+            android:onClick="onBtn1Clicked"
+            android:text="Button1" />
+
+        <Button
+            android:id="@+id/button2"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:background="@android:color/holo_blue_dark"
+            android:onClick="onBtn2Clicked"
+            android:text="Button2" />
+
+        <Button
+            android:id="@+id/button3"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:background="@android:color/holo_red_light"
+            android:onClick="onBtn3Clicked"
+            android:text="Button3" />
+    </LinearLayout>
+
+    <LinearLayout
+        android:id="@+id/buttonLatout"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:orientation="horizontal">
+
+        <Button
+            android:id="@+id/button4"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:text="Button" />
+
+        <Button
+            android:id="@+id/button5"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:text="Button" />
+    </LinearLayout>
+
+    <FrameLayout
+        android:id="@+id/contentsLayout"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_above="@+id/buttonLatout"
+        android:layout_alignParentStart="true"
+        android:layout_below="@+id/tabLayout">
+
+        <LinearLayout
+            android:id="@+id/Layout1"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:background="@android:color/holo_green_dark"
+            android:gravity="center_horizontal"
+            android:orientation="vertical">
+
+            <ImageView
+                android:id="@+id/imageView1"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                app:srcCompat="@drawable/car" />
+
+            <Button
+                android:id="@+id/button6"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:background="@android:color/holo_purple"
+                android:onClick="onBtn6Clicked"
+                android:text="이미지 바꾸기" />
+        </LinearLayout>
+
+        <LinearLayout
+            android:id="@+id/Layout2"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:background="@android:color/holo_blue_bright"
+            android:orientation="vertical"
+            android:visibility="gone"></LinearLayout>
+
+        <LinearLayout
+            android:id="@+id/Layout3"
+            android:layout_width="match_parent"
+            android:layout_height="456dp"
+            android:background="@android:color/holo_orange_light"
+            android:orientation="vertical"
+            android:visibility="gone"></LinearLayout>
+    </FrameLayout>
+</RelativeLayout>
