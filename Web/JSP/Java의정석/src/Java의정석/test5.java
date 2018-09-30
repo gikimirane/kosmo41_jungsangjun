@@ -1,4 +1,4 @@
-package Java의정석;
+ package Java의정석;
 
 public class test5 {
 
